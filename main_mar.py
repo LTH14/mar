@@ -284,10 +284,10 @@ def main(args):
         # online evaluation
         if args.online_eval and (epoch % args.eval_freq == 0 or epoch + 1 == args.epochs):
             torch.cuda.empty_cache()
-            evaluate(model, model_without_ddp, ema_params, args, epoch, batch_size=args.eval_bsz, log_writer=log_writer,
+            evaluate(model_without_ddp, vae, ema_params, args, epoch, batch_size=args.eval_bsz, log_writer=log_writer,
                      cfg=1.0, use_ema=True)
             if not (args.cfg == 1.0 or args.cfg == 0.0):
-                evaluate(model, model_without_ddp, ema_params, args, epoch, batch_size=args.eval_bsz // 2,
+                evaluate(model_without_ddp, vae, ema_params, args, epoch, batch_size=args.eval_bsz // 2,
                          log_writer=log_writer, cfg=args.cfg, use_ema=True)
             torch.cuda.empty_cache()
 
