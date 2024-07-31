@@ -62,6 +62,7 @@ def get_args_parser():
     parser.add_argument('--weight_decay', type=float, default=0.02,
                         help='weight decay (default: 0.02)')
 
+    parser.add_argument('--grad_checkpointing', action='store_true')
     parser.add_argument('--lr', type=float, default=None, metavar='LR',
                         help='learning rate (absolute lr)')
     parser.add_argument('--blr', type=float, default=1e-4, metavar='LR',
@@ -203,6 +204,7 @@ def main(args):
         diffloss_w=args.diffloss_w,
         num_sampling_steps=args.num_sampling_steps,
         diffusion_batch_mul=args.diffusion_batch_mul,
+        grad_checkpointing=args.grad_checkpointing,
     )
 
     print("Model = %s" % str(model))

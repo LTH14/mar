@@ -6,6 +6,7 @@ import scipy.stats as stats
 import math
 import torch
 import torch.nn as nn
+from torch.utils.checkpoint import checkpoint
 
 from timm.models.vision_transformer import Block
 
@@ -35,7 +36,8 @@ class MAR(nn.Module):
                  diffloss_d=3,
                  diffloss_w=1024,
                  num_sampling_steps='100',
-                 diffusion_batch_mul=4
+                 diffusion_batch_mul=4,
+                 grad_checkpointing=False,
                  ):
         super().__init__()
 
@@ -49,6 +51,7 @@ class MAR(nn.Module):
         self.seq_h = self.seq_w = img_size // vae_stride // patch_size
         self.seq_len = self.seq_h * self.seq_w
         self.token_embed_dim = vae_embed_dim * patch_size**2
+        self.grad_checkpointing = grad_checkpointing
 
         # --------------------------------------------------------------------------
         # Class Embedding
@@ -97,6 +100,7 @@ class MAR(nn.Module):
             width=diffloss_w,
             depth=diffloss_d,
             num_sampling_steps=num_sampling_steps,
+            grad_checkpointing=grad_checkpointing
         )
         self.diffusion_batch_mul = diffusion_batch_mul
 
@@ -189,8 +193,12 @@ class MAR(nn.Module):
         x = x[(1-mask_with_buffer).nonzero(as_tuple=True)].reshape(bsz, -1, embed_dim)
 
         # apply Transformer blocks
-        for blk in self.encoder_blocks:
-            x = blk(x)
+        if self.grad_checkpointing and not torch.jit.is_scripting():
+            for block in self.encoder_blocks:
+                x = checkpoint(block, x)
+        else:
+            for block in self.encoder_blocks:
+                x = block(x)
         x = self.encoder_norm(x)
 
         return x
@@ -209,8 +217,12 @@ class MAR(nn.Module):
         x = x_after_pad + self.decoder_pos_embed_learned
 
         # apply Transformer blocks
-        for blk in self.decoder_blocks:
-            x = blk(x)
+        if self.grad_checkpointing and not torch.jit.is_scripting():
+            for block in self.decoder_blocks:
+                x = checkpoint(block, x)
+        else:
+            for block in self.decoder_blocks:
+                x = block(x)
         x = self.decoder_norm(x)
 
         x = x[:, self.buffer_size:]

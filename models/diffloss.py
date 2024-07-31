@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.utils.checkpoint import checkpoint
 import math
 
 from diffusion import create_diffusion
@@ -7,7 +8,7 @@ from diffusion import create_diffusion
 
 class DiffLoss(nn.Module):
     """Diffusion Loss"""
-    def __init__(self, target_channels, z_channels, depth, width, num_sampling_steps):
+    def __init__(self, target_channels, z_channels, depth, width, num_sampling_steps, grad_checkpointing=False):
         super(DiffLoss, self).__init__()
         self.in_channels = target_channels
         self.net = SimpleMLPAdaLN(
@@ -16,6 +17,7 @@ class DiffLoss(nn.Module):
             out_channels=target_channels * 2,  # for vlb loss
             z_channels=z_channels,
             num_res_blocks=depth,
+            grad_checkpointing=grad_checkpointing
         )
 
         self.train_diffusion = create_diffusion(timestep_respacing="", noise_schedule="cosine")
@@ -163,6 +165,7 @@ class SimpleMLPAdaLN(nn.Module):
         out_channels,
         z_channels,
         num_res_blocks,
+        grad_checkpointing=False
     ):
         super().__init__()
 
@@ -170,6 +173,7 @@ class SimpleMLPAdaLN(nn.Module):
         self.model_channels = model_channels
         self.out_channels = out_channels
         self.num_res_blocks = num_res_blocks
+        self.grad_checkpointing = grad_checkpointing
 
         self.time_embed = TimestepEmbedder(model_channels)
         self.cond_embed = nn.Linear(z_channels, model_channels)
@@ -224,8 +228,12 @@ class SimpleMLPAdaLN(nn.Module):
 
         y = t + c
 
-        for block in self.res_blocks:
-            x = block(x, y)
+        if self.grad_checkpointing and not torch.jit.is_scripting():
+            for block in self.res_blocks:
+                x = checkpoint(block, x, y)
+        else:
+            for block in self.res_blocks:
+                x = block(x, y)
 
         return self.final_layer(x, y)
 
