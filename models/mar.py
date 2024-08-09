@@ -183,7 +183,9 @@ class MAR(nn.Module):
             drop_latent_mask = drop_latent_mask.unsqueeze(-1).cuda().to(x.dtype)
             class_embedding = drop_latent_mask * self.fake_latent + (1 - drop_latent_mask) * class_embedding
 
-        x[:, :self.buffer_size] = class_embedding.unsqueeze(1)
+        class_embedding = class_embedding.unsqueeze(1).expand(-1, self.buffer_size, -1)
+
+        x[:, :self.buffer_size] = class_embedding
 
         # encoder position embedding
         x = x + self.encoder_pos_embed_learned

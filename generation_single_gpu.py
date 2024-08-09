@@ -1,17 +1,15 @@
 import os
 
 import os
-os.chdir('mar')
-os.environ['PYTHONPATH'] = '/env/python:/content/mar'
 # MAR imports:
 import torch
 import numpy as np
+from tqdm import trange
 from models import mar
 from models.vae import AutoencoderKL
 from torchvision.utils import save_image
 from util import download
 from PIL import Image
-from IPython.display import display
 torch.set_grad_enabled(False)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 if device == "cpu":
@@ -44,6 +42,7 @@ model = mar.__dict__[model_type](
 state_dict = torch.load("pretrained_models/mar/{}/checkpoint-last.pth".format(model_type))["model_ema"]
 model.load_state_dict(state_dict)
 model.eval() # important!
+save_path = "generated_images"
 vae = AutoencoderKL(embed_dim=16, ch_mult=(1, 1, 2, 2, 4), ckpt_path="pretrained_models/vae/kl16.ckpt").cuda().eval()
 
 # Set user inputs:
@@ -54,18 +53,24 @@ num_ar_steps = 64 #@param {type:"slider", min:1, max:256, step:1}
 cfg_scale = 1.5 #@param {type:"slider", min:1, max:10, step:0.1}
 cfg_schedule = "constant" #@param ["linear", "constant"]
 temperature = 1.0 #@param {type:"slider", min:0.9, max:1.1, step:0.01}
-class_labels = np.arange(1000) #@param {type:"raw"}
-samples_per_row = 4 #@param {type:"number"}
+num_classes = 1000 #@param {type:"raw"}
+samples_per_class = 50 #@param {type:"number"}
+batch_size = 25 #@param {type:"number"}
 
+sampled_tokens = None
+total_generated_samples = 0
+iterations = (samples_per_class // batch_size) + 1
 with torch.cuda.amp.autocast():
-  sampled_tokens = model.sample_tokens(
-      bsz=len(class_labels), num_iter=num_ar_steps,
+  for i in trange(num_classes):
+    for j in range(iterations):
+      sampled_tokens = model.sample_tokens(
+      bsz=batch_size, num_iter=num_ar_steps,
       cfg=cfg_scale, cfg_schedule=cfg_schedule,
-      labels=torch.Tensor(class_labels).long().cuda(),
-      temperature=temperature, progress=True)
-  sampled_images = vae.decode(sampled_tokens / 0.2325)
-
-# Save and display images:
-save_image(sampled_images, "sample.png", nrow=int(samples_per_row), normalize=True, value_range=(-1, 1))
-samples = Image.open("sample.png")
-display(samples)
+      labels=torch.full((batch_size,), i, dtype=torch.long, device="cuda"),
+      temperature=temperature, progress=False)
+      sampled_images = vae.decode(sampled_tokens / 0.2325)
+      # save the images into the folder
+      for k in range(batch_size):
+          os.makedirs(save_path, exist_ok=True)
+          save_image(sampled_images[k], os.path.join(save_path, f"{k + total_generated_samples:6d}.png"), normalize=True, value_range=(-1, 1))
+      total_generated_samples += batch_size
