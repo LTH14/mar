@@ -75,6 +75,17 @@ main_cache.py \
 
 ## Usage
 
+### Inference for FiD score calculation
+To run the script to generate 50 images for each ImageNet class for FiD score evaluation __with a single GPU__,  please run the following command:
+```shell
+python generation_single_gpu.py --batch-size 32 --cfg-scale 1.5 --cfg-schedule constant --samples-per-class 50 --tf32 # the tf32 will accelerate the generation 
+```
+
+To run the script to generate 50 images for each ImageNet class for FiD score evaluation __with multiple GPUs__, please run the following command:
+```shell
+python generation_multi_gpus.py --per-proc-batch-size 32 --cfg-scale 1.5 --cfg-schedule constant --samples-per-class 50 --tf32 # the tf32 will accelerate the generation 
+```
+
 ### Demo
 Run our interactive visualization [demo](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb) using Colab notebook!
 
