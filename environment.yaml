@@ -16,6 +16,6 @@ dependencies:
     - tensorboard==2.10.0
     - scipy==1.9.1
     - gdown==5.2.0
-    - lightning = 2.3.0
+    - lightning==2.3.0
     - tqdm==4.62.3
     - -e git+https://github.com/LTH14/torch-fidelity.git@master#egg=torch-fidelity

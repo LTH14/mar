@@ -73,7 +73,7 @@ def main(args):
         total_generated_samples += args.batch_size
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(descrioption="Generate ImageNet images by using a single GPU.")
+  parser = argparse.ArgumentParser()
   parser.add_argument("--model-type", type=str, default="mar_huge", choices=["mar_base", "mar_large", "mar_huge"], help="The model type to use.")
   parser.add_argument("--num-sampling-steps-diffloss", type=int, default=115, help="The number of sampling steps for the diffloss.")
   parser.add_argument("--seed", type=int, default=0, help="The random seed")
@@ -84,6 +84,6 @@ if __name__ == "__main__":
   parser.add_argument("--num-classes", type=int, default=1000, help="The number of classes.")
   parser.add_argument("--samples-per-class", type=int, default=50, help="The number of samples per class.")
   parser.add_argument("--batch-size", type=int, default=25, help="The batch size.")
-  parser.add_argument("--tf32", type=bool, default=True, help="Whether to use tf32.")
+  parser.add_argument("--tf32", type=bool, action="store_true", help="Whether to use TF32.")
   args = parser.parse_args()
   main(args)
