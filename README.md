@@ -96,12 +96,6 @@ Training time with cached latents is ~1d11h on 16 H100 GPUs with `--batch_size 1
 - (Optional) To save GPU memory during training by using gradient checkpointing (thanks to @Jiawei-Yang), add `--grad_checkpointing` to the arguments. 
 Note that this may slightly reduce training speed.
 
-Tested on 8 80G A100 GPUs:
-
-MAR-L, diffloss_d 8, diffloss_w 1280: from ~62GB to ~32GB, with the training time increasing from 0.78s/iter to 0.94s/iter.
-MAR-H, diffloss_d 12, diffloss_w 1536: from Out of Memory (OOM) to ~44GB, with the training time around 1.56s/iter.
-The global batch size is 8x64=512
-
 ### Evaluation (ImageNet 256x256)
 
 Evaluate MAR-B (DiffLoss MLP with 6 blocks and a width of 1024 channels, 800 epochs) with classifier-free guidance:
