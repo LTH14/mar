@@ -130,7 +130,7 @@ class ResBlock(nn.Module):
 
 class FinalLayer(nn.Module):
     """
-    The final layer of DiT.
+    The final layer adopted from DiT.
     """
     def __init__(self, model_channels, out_channels):
         super().__init__()
@@ -217,10 +217,10 @@ class SimpleMLPAdaLN(nn.Module):
     def forward(self, x, t, c):
         """
         Apply the model to an input batch.
-        :param x: an [N x C x ...] Tensor of inputs.
+        :param x: an [N x C] Tensor of inputs.
         :param t: a 1-D batch of timesteps.
         :param c: conditioning from AR transformer.
-        :return: an [N x C x ...] Tensor of outputs.
+        :return: an [N x C] Tensor of outputs.
         """
         x = self.input_proj(x)
         t = self.time_embed(t)
