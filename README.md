@@ -25,8 +25,8 @@ This repo contains:
 * 🪐 A simple PyTorch implementation of [MAR](models/mar.py) and [DiffLoss](models/diffloss.py)
 * ⚡️ Pre-trained class-conditional MAR models trained on ImageNet 256x256
 * 💥 A self-contained [Colab notebook](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb) for running various pre-trained MAR models
-* 🎉 Integrated into [Hugging Face](https://huggingface.co/jadechoghari/mar) with a [Gradio Demo](https://huggingface.co/spaces/jadechoghari/mar) (thanks @jadechoghari!).
 * 🛸 An MAR+DiffLoss [training and evaluation script](main_mar.py) using PyTorch DDP
+* 🎉 Also checkout our [Hugging Face model cards](https://huggingface.co/jadechoghari/mar) and [Gradio demo](https://huggingface.co/spaces/jadechoghari/mar) (thanks @jadechoghari).
 
 ## Preparation
 
