@@ -3,6 +3,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv%20paper-2406.11838-b31b1b.svg)](https://arxiv.org/abs/2406.11838)&nbsp;
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/autoregressive-image-generation-without/image-generation-on-imagenet-256x256)](https://paperswithcode.com/sota/image-generation-on-imagenet-256x256?p=autoregressive-image-generation-without)
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb)
+[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-mar-yellow)](https://huggingface.co/jadechoghari/mar)&nbsp;
 
 <p align="center">
   <img src="demo/visual.png" width="720">
@@ -24,6 +25,7 @@ This repo contains:
 * 🪐 A simple PyTorch implementation of [MAR](models/mar.py) and [DiffLoss](models/diffloss.py)
 * ⚡️ Pre-trained class-conditional MAR models trained on ImageNet 256x256
 * 💥 A self-contained [Colab notebook](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb) for running various pre-trained MAR models
+* 🎉 Integrated into [Hugging Face](https://huggingface.co/jadechoghari/mar) with a [Gradio Demo](https://huggingface.co/spaces/jadechoghari/mar) (thanks @jadechoghari!).
 * 🛸 An MAR+DiffLoss [training and evaluation script](main_mar.py) using PyTorch DDP
 
 ## Preparation
