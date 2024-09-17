@@ -26,7 +26,7 @@ This repo contains:
 * ⚡️ Pre-trained class-conditional MAR models trained on ImageNet 256x256
 * 💥 A self-contained [Colab notebook](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb) for running various pre-trained MAR models
 * 🛸 An MAR+DiffLoss [training and evaluation script](main_mar.py) using PyTorch DDP
-* 🎉 Also checkout our [Hugging Face model cards](https://huggingface.co/jadechoghari/mar) and [Gradio demo](https://huggingface.co/spaces/jadechoghari/mar) (thanks @jadechoghari).
+* 🎉 Also checkout our [Hugging Face model cards](https://huggingface.co/jadechoghari/mar) and [Gradio demo](https://huggingface.co/spaces/jadechoghari/mar) (thanks [@jadechoghari](https://github.com/jadechoghari)).
 
 ## Preparation
 
@@ -79,6 +79,14 @@ main_cache.py \
 
 ### Demo
 Run our interactive visualization [demo](http://colab.research.google.com/github/LTH14/mar/blob/main/demo/run_mar.ipynb) using Colab notebook!
+
+### Local Gradio App
+
+```
+python demo/gradio_app.py 
+```
+
+
 
 ### Training
 Script for the default setting (MAR-L, DiffLoss MLP with 3 blocks and a width of 1024 channels, 400 epochs):
