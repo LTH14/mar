@@ -56,7 +56,7 @@ class MAR(nn.Module):
         # --------------------------------------------------------------------------
         # Class Embedding
         self.num_classes = class_num
-        self.class_emb = nn.Embedding(1000, encoder_embed_dim)
+        self.class_emb = nn.Embedding(class_num, encoder_embed_dim)
         self.label_drop_prob = label_drop_prob
         # Fake class embedding for CFG's unconditional generation
         self.fake_latent = nn.Parameter(torch.zeros(1, encoder_embed_dim))
