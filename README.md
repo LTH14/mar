@@ -9,7 +9,7 @@
   <img src="demo/visual.png" width="720">
 </p>
 
-This is a PyTorch/GPU implementation of the paper [Autoregressive Image Generation without Vector Quantization](https://arxiv.org/abs/2406.11838):
+This is a PyTorch/GPU implementation of the paper [Autoregressive Image Generation without Vector Quantization](https://arxiv.org/abs/2406.11838) (Neurips 2024 Spotlight Presentation):
 
 ```
 @article{li2024autoregressive,
