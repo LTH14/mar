@@ -96,7 +96,7 @@ main_mar.py \
 --img_size 256 --vae_path pretrained_models/vae/kl16.ckpt --vae_embed_dim 16 --vae_stride 16 --patch_size 1 \
 --model mar_large --diffloss_d 8 --diffloss_w 1280 \
 --epochs 400 --warmup_epochs 100 --batch_size 64 --blr 1.0e-4 --diffusion_batch_mul 4 \
---output_dir ${OUTPUT_DIR} --resume ${OUTPUT_DIR} \
+--output_dir ${OUTPUT_DIR} --resume ${CHECKPOINT_DIR} \
 --data_path ${IMAGENET_PATH}
 ```
 - Training time is ~1d7h on 32 H100 GPUs with `--batch_size 64`.
